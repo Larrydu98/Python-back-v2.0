@@ -351,7 +351,7 @@ class getDataFilterCsvAfterTimeByUpid:
         endTime = datetime.datetime.strptime(endTime_str, '%Y-%m-%d %H:%M:%S')
         startTime_str = str(endTime + datetime.timedelta(days=-upidBeforeTimeDay))
 
-        return startTime_str,endTime_str
+        return startTime_str, endTime_str
 
 
 class dataFilterCsvAfterByTime:

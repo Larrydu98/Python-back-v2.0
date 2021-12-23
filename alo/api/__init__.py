@@ -37,4 +37,8 @@ from . import BoardNumApi
 from . import newGetMareyDataApi
 from . import diagnosisDataByTimeApi
 from . import monitorDataByTimeApi
+from . import testHello
 # from . import modelPredictCsvAllFlagApi
+'''
+start
+'''
