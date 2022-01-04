@@ -3,11 +3,13 @@ import json
 from alo.utils import readConfig
 from flask_restful import Resource, reqparse
 from alo.utils import readConfig
+
 parser = reqparse.RequestParser(trim=True, bundle_errors=True)
 
-class GetTestData:
+
+class getThicknessDataDB:
     @staticmethod
-    def getMareyDataDB(parser,limit):
+    def getMareyDataDB(parser, limit):
         label = ["platetype", "tgtwidth", "tgtlength", "tgtthickness"]
         post_lable = {}
         for index in label:
@@ -15,11 +17,10 @@ class GetTestData:
         args = parser.parse_args(strict=True)
         for key, value in args.items():
             if (key == 'platetype'):
-                test = eval(value.replace('\\', ''))[0]
                 post_lable['platetype'] = eval(value.replace('\\', ''))[0]
             else:
                 post_lable[key] = round(eval(value)[1] - eval(value)[0], 4)
-        SQLQueryFront ='''
+        SQLQueryFront = '''
         select
         dd.upid,
         dd.platetype,
@@ -42,12 +43,15 @@ class GetTestData:
         and {platetype}
         order by dd.toc
         limit {limit}
-        '''.format(tgtthickness='1=1' if args['tgtthickness'] == '[]' else "dd.tgtthickness >= " + str(eval(args['tgtthickness'])[0]) + " and dd.tgtthickness <= " + str(eval(args['tgtthickness'])[1]),
-               tgtwidth='1=1' if args['tgtwidth'] == '[]' else  "dd.tgtwidth >= " + str(eval(args['tgtwidth'])[0]) + " and dd.tgtwidth <= " + str(eval(args['tgtwidth'])[1]),
-               tgtlength='1=1' if args['tgtlength'] == '[]' else "dd.tgtlength >= " + str(eval(args['tgtlength'])[0]) + " and dd.tgtlength <= " + str(eval(args['tgtlength'])[1]),
-               platetype = "dd.platetype = '" + str(eval(args['platetype'].replace('\\', ''))[0]) + "' ",
-               limit= int(limit)
-                )
+        '''.format(tgtthickness='1=1' if args['tgtthickness'] == '[]' else "dd.tgtthickness >= " + str(
+            eval(args['tgtthickness'])[0]) + " and dd.tgtthickness <= " + str(eval(args['tgtthickness'])[1]),
+                   tgtwidth='1=1' if args['tgtwidth'] == '[]' else "dd.tgtwidth >= " + str(
+                       eval(args['tgtwidth'])[0]) + " and dd.tgtwidth <= " + str(eval(args['tgtwidth'])[1]),
+                   tgtlength='1=1' if args['tgtlength'] == '[]' else "dd.tgtlength >= " + str(
+                       eval(args['tgtlength'])[0]) + " and dd.tgtlength <= " + str(eval(args['tgtlength'])[1]),
+                   platetype="dd.platetype = '" + str(eval(args['platetype'].replace('\\', ''))[0]) + "' ",
+                   limit=int(limit)
+                   )
         configArr = readConfig()
         conn = psycopg2.connect(database=configArr[0], user=configArr[1], password=configArr[2], host=configArr[3],
                                 port=configArr[4])
@@ -59,7 +63,6 @@ class GetTestData:
         col_names = []
         for elt in cursor.description:
             col_names.append(elt[0])
-
         conn.close()
         return post_lable, rows, col_names
 
@@ -74,6 +77,7 @@ class GetTestData:
                 dd.tgtthickness,
                 dd.toc,
                 dd.fqc_label as label,
+                (fqc_label->>'method1')::json->>'data' as thicknessflag,
                 dd.status_fqc,
                 lmp.thicknessos,
                 lmp.thicknessclosetotal
@@ -84,8 +88,8 @@ class GetTestData:
         SQLquery = SQLQueryFront + '''
         where {toc}
         order by dd.toc
-        '''.format(toc ="dd.toc >= '" + str(time['start']) + "' and dd.toc < '" + str(time['end']) + "'"
-                )
+        '''.format(toc="dd.toc >= '" + str(time['start']) + "' and dd.toc < '" + str(time['end']) + "'"
+                   )
         configArr = readConfig()
         conn = psycopg2.connect(database=configArr[0], user=configArr[1], password=configArr[2], host=configArr[3],
                                 port=configArr[4])
@@ -93,15 +97,16 @@ class GetTestData:
         cursor.execute(SQLquery)
         rows = cursor.fetchall()
 
-        # Extract the column names
+        # Extract the column names这个键盘也好不舒服呀真是的太恶心了这样的键盘怎么能这么恶心人呢
+
         col_names = []
         for elt in cursor.description:
             col_names.append(elt[0])
 
         conn.close()
+
         return rows, col_names
         # parser.add_argument("productcategory", type=str, required=True)
         # parser.add_argument("steelspec", type=str, required=True)
         # parser.add_argument("status_cooling", type=str, required=True)
         # parser.add_argument("fqcflag", type=str, required=True)
-
