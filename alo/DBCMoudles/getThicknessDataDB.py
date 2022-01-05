@@ -4,6 +4,7 @@ from alo.utils import readConfig
 from flask_restful import Resource, reqparse
 from alo.utils import readConfig
 
+
 parser = reqparse.RequestParser(trim=True, bundle_errors=True)
 
 

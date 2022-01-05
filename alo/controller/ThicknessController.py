@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import json
 import datetime as dt
+import time
 
 from ..DBCMoudles.getThicknessDataDB import *
 
@@ -80,11 +81,6 @@ class ComputeThicknessData:
             res_list = []
             for index, val in enumerate(df_cluster):
                 # len(val[(val['status_fqc'] == 1) / len(val)
-
-
-
-
-
                 if index != len(df_cluster) - 1:
                     good_flag = round(len(val[(val['status_fqc'] == 0) & (val['thicknessflag'] == '[1, 1, 1, 1, 1]')]) / len(val), 2)
                     bad_flag = round(len(val[(val['status_fqc'] == 0) & (val['thicknessflag'] != '[1, 1, 1, 1, 1]')]) / len(val), 2)
@@ -125,8 +121,23 @@ class ComputeThicknessData:
                             "flag_time": (val.iloc[0].toc + (val.iloc[len(val) - 1].toc - val.iloc[0].toc) / 2).strftime("%Y-%m-%d %H:%M:%S"),
                             "match_flag": 0
                         })
+
+
+            for index, val in enumerate(res_list):
+                if index == 0:
+                    continue
+                else:
+                    last_index = index - 1
+                    last_time = time.mktime(time.strptime(res_list[last_index]['flag_time'], "%Y-%m-%d %H:%M:%S"))
+                    now_time = time.mktime(time.strptime(val['flag_time'], "%Y-%m-%d %H:%M:%S"))
+                    if now_time - last_time > 0:
+                        continue
+                    else:
+                        del res_list[index]
+
+
             res.append(res_list)
-            final_arr.append(df_cluster)
+            # final_arr.append(df_cluster)
         return res
 
     def timeDensity(self, data, density, rule):
