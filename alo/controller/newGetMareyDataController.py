@@ -115,6 +115,8 @@ class newComputeMareyData:
             fm_name = ['FmStart', 'FmF3Pass', 'FmL3Pass', 'FmEnd']
             cc_name = ['CcStart', 'CcDQEnd', 'CcACCEnd']
 
+            dq_count = self.marey_data[self.marey_data.upid == upids[i]].dq_count
+
             try:
                 flag = self.flag[upids[i]]
             except:

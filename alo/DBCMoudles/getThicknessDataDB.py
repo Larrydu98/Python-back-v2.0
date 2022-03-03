@@ -44,12 +44,9 @@ class getThicknessDataDB:
         and {platetype}
         order by dd.toc
         limit {limit}
-        '''.format(tgtthickness='1=1' if args['tgtthickness'] == '[]' else "dd.tgtthickness >= " + str(
-            eval(args['tgtthickness'])[0]) + " and dd.tgtthickness <= " + str(eval(args['tgtthickness'])[1]),
-                   tgtwidth='1=1' if args['tgtwidth'] == '[]' else "dd.tgtwidth >= " + str(
-                       eval(args['tgtwidth'])[0]) + " and dd.tgtwidth <= " + str(eval(args['tgtwidth'])[1]),
-                   tgtlength='1=1' if args['tgtlength'] == '[]' else "dd.tgtlength >= " + str(
-                       eval(args['tgtlength'])[0]) + " and dd.tgtlength <= " + str(eval(args['tgtlength'])[1]),
+        '''.format(tgtthickness='1=1' if args['tgtthickness'] == '[]' else "dd.tgtthickness >= " + str(eval(args['tgtthickness'])[0]) + " and dd.tgtthickness <= " + str(eval(args['tgtthickness'])[1]),
+                   tgtwidth='1=1' if args['tgtwidth'] == '[]' else "dd.tgtwidth >= " + str(eval(args['tgtwidth'])[0]) + " and dd.tgtwidth <= " + str(eval(args['tgtwidth'])[1]),
+                   tgtlength='1=1' if args['tgtlength'] == '[]' else "dd.tgtlength >= " + str(eval(args['tgtlength'])[0]) + " and dd.tgtlength <= " + str(eval(args['tgtlength'])[1]),
                    platetype="dd.platetype = '" + str(eval(args['platetype'].replace('\\', ''))[0]) + "' ",
                    limit=int(limit)
                    )

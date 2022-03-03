@@ -93,17 +93,7 @@ class diagnosisDataByTimeApi(Resource):
                                                 ['dd.upid', 'lmpd.productcategory', 'dd.tgtwidth','dd.tgtlength',
                                                  'dd.tgtthickness','dd.stats','dd.fqc_label', 'dd.toc'],
                                                 limit)
-
-        # print(len(data))
-        result = []
-        outOfGau = {}
-        PCAT2 = {}
-        PCASPE = {}
-
-        # myresult = getData()
-        # data = myresult['data']
-        # wideData = myresult['wideData']
-
+        # data就是限制的1000个数据
         if (len(data) == 0):
             return {}, 204, {'Access-Control-Allow-Origin': '*'}
 
