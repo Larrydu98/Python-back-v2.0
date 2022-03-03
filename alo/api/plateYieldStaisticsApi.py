@@ -48,17 +48,9 @@ class plateYieldStaistics(Resource):
             200:
                 description: 执行成功
         """
-        # return {'hello': 'world'}
 
         timeDiff = int(timeDiff)
 
-        # DataPlateAndFlagCRAndFqc = getDataPlateAndFlagCRAndFqc(startTime,endTime)
-        # month_data = DataPlateAndFlagCRAndFqc.run()
-
-
-
-
-        # month_data is the data read from database
         tocSelect = [startTime, endTime]
         # ismissing={'all_processes_statistics_ismissing':True,'cool_ismissing':True,'fu_temperature_ismissing':True,'m_ismissing':True,'fqc_ismissing':True}
         ismissing = {}
@@ -79,24 +71,9 @@ class plateYieldStaistics(Resource):
                     month_data['flag'].append(1)
                 else:
                     month_data['flag'].append(0)
-
-          # msum = 0
-          # month_data['toc'].append(item[1])
-          # month_data['upid'].append(item[0])
-          # flagArr = getFlagArr(item[2]['method1'])
-          # for label in flagArr:
-          #   msum = msum + label
-          # if (msum >= ref):
-          #   month_data['flag'].append(1)
-          # else:
-          #   month_data['flag'].append(0)
         month_data = pd.DataFrame(month_data)
-        # print(month_data['flag'].shape)
         PlateYieldStaistics = getDataPlateYieldAndFlag(startTime,endTime)
         good_flag,bad_flag,no_flag,endTimeOutput = PlateYieldStaistics.run(timeDiff, month_data)
-        # good_flag,bad_flag,endTimeOutput = PlateYieldStaistics.run(timeDiff,month_data)
-
-
         return {'endTimeOutput': endTimeOutput,'good_flag': good_flag,'bad_flag': bad_flag,'no_flag':no_flag}, 200, {'Access-Control-Allow-Origin': '*'}
 
 

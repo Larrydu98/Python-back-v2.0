@@ -15,7 +15,7 @@ class ThicknessAnalysisApi(Resource):
     def post(self, plate_limit, day_limit, hour_limit):
         # res = ComputeThicknessData(parser, plate_limit, day_limit, hour_limit)
         res = ComputeThicknessData(parser, plate_limit, day_limit, hour_limit)
-        data = res.printData
+        data = res.printData()
         return data, 200, {'Access-Control-Allow-Origin': '*'}
 
 

@@ -304,6 +304,7 @@ class createDiagResu:
                                        ismissing, [], [], [],
                                        [self.start_time, self.end_time],
                                        [], [], '', '')
+        # 这里的data是按照时间查找的要诊断钢板的数据
         data_df = pd.DataFrame(data=data, columns=columns).dropna(axis=0, how='any').reset_index(drop=True)
         if len(data_df) == 0:
             return [], 204
